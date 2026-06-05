@@ -82,8 +82,7 @@ class CleaningParams:
             return cls(**json.load(fh))
 
 
-def fit_cleaning_params(df: pd.DataFrame,winsor_quantile: float = 0.995) -> CleaningParams:
-    
+def fit_cleaning_params(df: pd.DataFrame, winsor_quantile: float = 0.995) -> CleaningParams:
     """Learn cleaning thresholds from a (training) dataframe."""
     past_due_caps = {
         col: float(df.loc[df[col] < SENTINEL_THRESHOLD, col].max())
@@ -93,7 +92,6 @@ def fit_cleaning_params(df: pd.DataFrame,winsor_quantile: float = 0.995) -> Clea
     winsor_caps = {
         col: float(df[col].quantile(winsor_quantile))
         for col in WINSORIZE_COLS
-        if col != "DebtRatio"
     }
 
     valid_income_mask = (
