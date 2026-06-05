@@ -48,7 +48,7 @@ def main() -> None:
 
     for name, df in splits.items():
         cleaned = apply_cleaning(df, params)
-        out_name = name.replace(".csv", "-clean.csv")
+        out_name = name.replace(".csv", "-processed.csv")
         cleaned.to_csv(args.out_dir / out_name)
         print(
             f"{name}: {len(df):,} rows -> {args.out_dir / out_name} "
