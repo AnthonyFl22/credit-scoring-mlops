@@ -1,0 +1,12 @@
+{
+  "name": "conservative",
+  "max_depth": 3,
+  "learning_rate": 0.05,
+  "n_estimators": 1000,
+  "subsample": 0.7,
+  "colsample_bytree": 0.7,
+  "min_child_weight": 20,
+  "reg_alpha": 0.5,
+  "reg_lambda": 2.0,
+  "early_stopping_rounds": 50
+}
