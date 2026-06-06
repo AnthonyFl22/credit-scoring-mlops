@@ -32,19 +32,19 @@ def main() -> None:
     parser.add_argument("--winsor-quantile", type=float, default=0.995)
     args = parser.parse_args()
 
-    train = pd.read_csv(args.processed_dir / "cs-training-clean.csv", index_col=0)
+    train = pd.read_csv(args.processed_dir / "cs-training-processed.csv", index_col=0)
     params = fit_feature_params(train, winsor_quantile=args.winsor_quantile)
     params.to_json(args.processed_dir / "feature_params.json")
     print(f"Fitted feature params -> {args.processed_dir / 'feature_params.json'}")
 
-    splits = {"cs-training-clean.csv": train}
-    test_path = args.processed_dir / "cs-test-clean.csv"
+    splits = {"cs-training-processed.csv": train}
+    test_path = args.processed_dir / "cs-test-processed.csv"
     if test_path.exists():
-        splits["cs-test-clean.csv"] = pd.read_csv(test_path, index_col=0)
+        splits["cs-test-processed.csv"] = pd.read_csv(test_path, index_col=0)
 
     for name, df in splits.items():
         featured = apply_features(df, params)
-        out_name = name.replace("-clean.csv", "-featured.csv")
+        out_name = name.replace("-processed.csv", "-featured.csv")
         featured.to_csv(args.processed_dir / out_name)
         new_cols = featured.shape[1] - df.shape[1]
         print(
