@@ -132,11 +132,11 @@ class CVResult:
         return float(np.mean([f.roc_auc for f in self.fold_metrics]))
 
     def means(self) -> Dict[str, float]:
-        metrics = ("roc_auc", "gini", "avg_precision", "ks", "precision", "recall", "f1")
+        metrics = ("roc_auc", "gini", "avg_precision", "ks", "precision", "recall", "f1", "threshold")
         return {m: float(np.mean([getattr(f, m) for f in self.fold_metrics])) for m in metrics}
 
     def stds(self) -> Dict[str, float]:
-        metrics = ("roc_auc", "gini", "avg_precision", "ks", "precision", "recall", "f1")
+        metrics = ("roc_auc", "gini", "avg_precision", "ks", "precision", "recall", "f1", "threshold")
         return {m: float(np.std([getattr(f, m) for f in self.fold_metrics])) for m in metrics}
 
     def confusion_matrix_sum(self) -> Dict[str, int]:

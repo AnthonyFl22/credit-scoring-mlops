@@ -14,7 +14,7 @@
     {
       "name": "age",
       "dtype": "int",
-      "min": 21.0,
+      "min": 18.0,
       "max": 109.0,
       "required": true,
       "description": "Age of the borrower in years. Must be >= 18."
@@ -37,7 +37,7 @@
     },
     {
       "name": "MonthlyIncome",
-      "dtype": "int",
+      "dtype": "float",
       "min": 0.0,
       "max": 35000.0,
       "required": false,
