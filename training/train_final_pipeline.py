@@ -14,6 +14,7 @@ Usage (from repo root):
 
 from __future__ import annotations
 
+import datetime
 import json
 import sys
 from pathlib import Path
@@ -36,7 +37,7 @@ RAW_DIR = REPO_ROOT / "data" / "raw"
 
 CONFIG_NAME = "baseline"
 BEST_N_ESTIMATORS = 193
-TRAINING_DATE = "2026-06-08"
+TRAINING_DATE = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 FEATURE_DESCRIPTIONS = {
     "RevolvingUtilizationOfUnsecuredLines": (
@@ -63,15 +64,19 @@ FEATURE_DESCRIPTIONS = {
 NULLABLE_FEATURES = {"MonthlyIncome", "NumberOfDependents"}
 
 
+FORCE_FLOAT = {"MonthlyIncome", "DebtRatio", "RevolvingUtilizationOfUnsecuredLines"}
+FORCE_MIN = {"age": MIN_VALID_AGE}
+
+
 def _build_feature_schema(processed_df: pd.DataFrame) -> dict:
     features = []
     for name, description in FEATURE_DESCRIPTIONS.items():
         col = processed_df[name].dropna()
-        is_integer = (col == col.astype(int)).all()
+        is_integer = name not in FORCE_FLOAT and (col == col.astype(int)).all()
         features.append({
             "name": name,
             "dtype": "int" if is_integer else "float",
-            "min": round(float(col.min()), 6),
+            "min": round(float(FORCE_MIN.get(name, col.min())), 6),
             "max": round(float(col.max()), 6),
             "required": name not in NULLABLE_FEATURES,
             "description": description,
