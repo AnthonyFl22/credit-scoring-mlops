@@ -1,0 +1,23 @@
+{
+  "model_name": "credit_scoring",
+  "version": "v1",
+  "trained_at": "2026-06-08",
+  "config": "baseline",
+  "best_n_estimators": 193,
+  "metrics": {
+    "roc_auc": 0.8661,
+    "gini": 0.7322,
+    "ks": 0.579,
+    "avg_precision": 0.4031,
+    "precision": 0.4053,
+    "recall": 0.5033,
+    "f1": 0.4484
+  },
+  "confusion_matrix": {
+    "tn": 132530,
+    "fp": 7443,
+    "fn": 4980,
+    "tp": 5046
+  },
+  "cv_std_roc_auc": 0.0039
+}

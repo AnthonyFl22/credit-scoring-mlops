@@ -1,0 +1,87 @@
+{
+  "model_name": "credit_scoring",
+  "version": "v1",
+  "target": "SeriousDlqin2yrs",
+  "features": [
+    {
+      "name": "RevolvingUtilizationOfUnsecuredLines",
+      "dtype": "float",
+      "min": 0.0,
+      "max": 1.366269,
+      "required": true,
+      "description": "Total balance on credit cards and personal lines of credit divided by the sum of credit limits."
+    },
+    {
+      "name": "age",
+      "dtype": "int",
+      "min": 21.0,
+      "max": 109.0,
+      "required": true,
+      "description": "Age of the borrower in years. Must be >= 18."
+    },
+    {
+      "name": "NumberOfTime30-59DaysPastDueNotWorse",
+      "dtype": "int",
+      "min": 0.0,
+      "max": 13.0,
+      "required": true,
+      "description": "Number of times 30-59 days past due in the last 2 years."
+    },
+    {
+      "name": "DebtRatio",
+      "dtype": "float",
+      "min": 0.0,
+      "max": 3.169096,
+      "required": true,
+      "description": "Monthly debt payments (alimony, living costs) divided by monthly gross income."
+    },
+    {
+      "name": "MonthlyIncome",
+      "dtype": "int",
+      "min": 0.0,
+      "max": 35000.0,
+      "required": false,
+      "description": "Monthly gross income in USD. Null values are accepted and imputed with the training median."
+    },
+    {
+      "name": "NumberOfOpenCreditLinesAndLoans",
+      "dtype": "int",
+      "min": 0.0,
+      "max": 58.0,
+      "required": true,
+      "description": "Number of open loans and lines of credit."
+    },
+    {
+      "name": "NumberOfTimes90DaysLate",
+      "dtype": "int",
+      "min": 0.0,
+      "max": 17.0,
+      "required": true,
+      "description": "Number of times 90 or more days past due."
+    },
+    {
+      "name": "NumberRealEstateLoansOrLines",
+      "dtype": "int",
+      "min": 0.0,
+      "max": 54.0,
+      "required": true,
+      "description": "Number of mortgage and real estate loans including home equity lines of credit."
+    },
+    {
+      "name": "NumberOfTime60-89DaysPastDueNotWorse",
+      "dtype": "int",
+      "min": 0.0,
+      "max": 11.0,
+      "required": true,
+      "description": "Number of times 60-89 days past due in the last 2 years."
+    },
+    {
+      "name": "NumberOfDependents",
+      "dtype": "int",
+      "min": 0.0,
+      "max": 20.0,
+      "required": false,
+      "description": "Number of dependents in the household, excluding the borrower. Null values are accepted and imputed with 0."
+    }
+  ]
+}
