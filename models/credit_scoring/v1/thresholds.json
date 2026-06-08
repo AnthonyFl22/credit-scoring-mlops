@@ -1,0 +1,6 @@
+{
+  "approve_max": 0.15,
+  "review_max": 0.4,
+  "reject_min": 0.4,
+  "notes": "Provisional thresholds. To be refined via cost-based threshold optimization."
+}
