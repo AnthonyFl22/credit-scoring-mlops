@@ -113,12 +113,15 @@ def fit_cleaning_params(df: pd.DataFrame, winsor_quantile: float = 0.995) -> Cle
         winsor_quantile=winsor_quantile,
     )
 
-def apply_cleaning(df: pd.DataFrame, params: CleaningParams) -> pd.DataFrame:
+def apply_cleaning(
+    df: pd.DataFrame, params: CleaningParams, drop_invalid_age: bool = True
+) -> pd.DataFrame:
     """Return a cleaned copy of ``df`` using previously fitted ``params``."""
     out = df.copy()
 
-    # 1. Drop impossible ages.
-    out = out[out["age"] >= MIN_VALID_AGE]
+    # 1. Drop impossible ages (skipped inside sklearn Pipeline transforms).
+    if drop_invalid_age:
+        out = out[out["age"] >= MIN_VALID_AGE]
 
     # 2. Cap sentinel past-due codes (96/98) to the realistic per-column max.
     for col, cap in params.past_due_caps.items():
