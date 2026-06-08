@@ -71,7 +71,7 @@ def main() -> None:
         "--processed-dir", type=Path, default=REPO_ROOT / "data" / "processed"
     )
     parser.add_argument(
-        "--models-dir", type=Path, default=REPO_ROOT / "models"
+        "--models-dir", type=Path, default=REPO_ROOT / "models" / "experiments"
     )
     parser.add_argument(
         "--configs",

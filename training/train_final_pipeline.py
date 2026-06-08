@@ -140,7 +140,7 @@ def main() -> None:
     (V1_DIR / "feature_schema.json").write_text(json.dumps(schema, indent=2))
     print(f"Saved: {V1_DIR / 'feature_schema.json'}")
 
-    cv_results = json.loads((REPO_ROOT / "models" / "cv_results.json").read_text())
+    cv_results = json.loads((REPO_ROOT / "models" / "experiments" / "cv_results.json").read_text())
     metrics_doc = _build_metrics_doc(cv_results)
     (V1_DIR / "metrics.json").write_text(json.dumps(metrics_doc, indent=2))
     print(f"Saved: {V1_DIR / 'metrics.json'}")
