@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import asdict, dataclass
+from pathlib import Path
 from typing import Dict, List
 
 import numpy as np
@@ -39,6 +40,7 @@ class ModelConfig:
     early_stopping_rounds: int = 50
 
     def to_xgb_kwargs(self, scale_pos_weight: float) -> dict:
+        """Return XGBClassifier kwargs with ``scale_pos_weight`` applied."""
         return {
             "max_depth": self.max_depth,
             "learning_rate": self.learning_rate,
@@ -55,12 +57,12 @@ class ModelConfig:
             "n_jobs": -1,
         }
 
-    def to_json(self, path) -> None:
+    def to_json(self, path: Path | str) -> None:
         with open(path, "w", encoding="utf-8") as fh:
             json.dump(asdict(self), fh, indent=2)
 
     @classmethod
-    def from_json(cls, path) -> "ModelConfig":
+    def from_json(cls, path: Path | str) -> "ModelConfig":
         with open(path, "r", encoding="utf-8") as fh:
             return cls(**json.load(fh))
 
@@ -106,6 +108,8 @@ CONFIGS: Dict[str, ModelConfig] = {
 
 @dataclass
 class FoldMetrics:
+    """Evaluation metrics computed on a single CV fold."""
+
     roc_auc: float
     gini: float
     avg_precision: float
@@ -123,19 +127,24 @@ class FoldMetrics:
 
 @dataclass
 class CVResult:
+    """Aggregated result from stratified k-fold CV for one model config."""
+
     config_name: str
     fold_metrics: List[FoldMetrics]
     # Mean best_iteration across folds — used as n_estimators for the final refit.
     best_n_estimators: int
 
     def mean_auc(self) -> float:
+        """Mean ROC-AUC across folds."""
         return float(np.mean([f.roc_auc for f in self.fold_metrics]))
 
     def means(self) -> Dict[str, float]:
+        """Mean of each tracked metric across folds."""
         metrics = ("roc_auc", "gini", "avg_precision", "ks", "precision", "recall", "f1", "threshold")
         return {m: float(np.mean([getattr(f, m) for f in self.fold_metrics])) for m in metrics}
 
     def stds(self) -> Dict[str, float]:
+        """Standard deviation of each tracked metric across folds."""
         metrics = ("roc_auc", "gini", "avg_precision", "ks", "precision", "recall", "f1", "threshold")
         return {m: float(np.std([getattr(f, m) for f in self.fold_metrics])) for m in metrics}
 
@@ -169,7 +178,7 @@ def _best_f1_threshold(y_true: np.ndarray, y_prob: np.ndarray) -> float:
 
 
 def _compute_metrics(y_true: np.ndarray, y_prob: np.ndarray, best_iter: int) -> FoldMetrics:
-    
+    """Compute all fold metrics from true labels and predicted probabilities."""
     auc = roc_auc_score(y_true, y_prob)
     threshold = _best_f1_threshold(y_true, y_prob)
     y_pred = (y_prob >= threshold).astype(int)
@@ -236,6 +245,6 @@ def train_final_model(
     return clf
 
 
-def features_and_target(df: pd.DataFrame):
+def features_and_target(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
     """Split a featured dataframe into (X, y)."""
     return df.drop(columns=[TARGET]), df[TARGET]
