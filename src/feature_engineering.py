@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import asdict, dataclass
+from pathlib import Path
 from typing import List
 
 import numpy as np
@@ -38,12 +39,12 @@ class FeatureParams:
     income_per_dependent_cap: float
     open_lines_per_age_cap: float
 
-    def to_json(self, path) -> None:
+    def to_json(self, path: Path | str) -> None:
         with open(path, "w", encoding="utf-8") as fh:
             json.dump(asdict(self), fh, indent=2)
 
     @classmethod
-    def from_json(cls, path) -> "FeatureParams":
+    def from_json(cls, path: Path | str) -> "FeatureParams":
         with open(path, "r", encoding="utf-8") as fh:
             return cls(**json.load(fh))
 
@@ -86,7 +87,9 @@ def apply_features(df: pd.DataFrame, params: FeatureParams) -> pd.DataFrame:
     return out
 
 
-def build_features(df: pd.DataFrame, winsor_quantile: float = 0.995):
+def build_features(
+    df: pd.DataFrame, winsor_quantile: float = 0.995
+) -> tuple[pd.DataFrame, FeatureParams]:
     """Convenience: fit on ``df`` and return ``(featured_df, params)``."""
     params = fit_feature_params(df, winsor_quantile=winsor_quantile)
     return apply_features(df, params), params

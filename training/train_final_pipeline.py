@@ -69,6 +69,7 @@ FORCE_MIN = {"age": MIN_VALID_AGE}
 
 
 def _build_feature_schema(processed_df: pd.DataFrame) -> dict:
+    """Build the feature_schema.json contract from the processed training data."""
     features = []
     for name, description in FEATURE_DESCRIPTIONS.items():
         col = processed_df[name].dropna()
@@ -90,6 +91,7 @@ def _build_feature_schema(processed_df: pd.DataFrame) -> dict:
 
 
 def _build_metrics_doc(cv_results: list) -> dict:
+    """Build the metrics.json document from the saved CV results."""
     entry = next(r for r in cv_results if r["config"] == CONFIG_NAME)
     return {
         "model_name": "credit_scoring",

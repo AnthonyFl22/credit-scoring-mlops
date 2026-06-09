@@ -1,11 +1,10 @@
+"""Pydantic request and response schemas for the credit scoring API."""
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, Literal
 
-# First, define the input schema for the API
+
 class CreditScoringInput(BaseModel):
-    """
-    Input schema for the credit scoring API.
-    """
+    """10 raw input features expected by the v1 model pipeline."""
     model_config = ConfigDict(
         extra='forbid',
         populate_by_name=True,
@@ -36,9 +35,7 @@ class CreditScoringInput(BaseModel):
     NumberOfDependents: Optional[int] = Field(None, ge=0, description="Number of dependents (must be non-negative if provided)")
     
 class CreditScoringOutput(BaseModel):
-    """
-    Output schema for the credit scoring API.
-    """
+    """Prediction result returned by the /predict endpoint."""
     model_config = ConfigDict(
         extra='forbid',
         json_schema_extra={

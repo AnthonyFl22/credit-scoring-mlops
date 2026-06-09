@@ -2,9 +2,9 @@
 
 Usage (from the repo root):
 
-    python scripts/train_model.py                              # compare all presets
-    python scripts/train_model.py --configs baseline           # single config
-    python scripts/train_model.py --configs conservative baseline deeper
+    python training/train_model.py                              # compare all presets
+    python training/train_model.py --configs baseline           # single config
+    python training/train_model.py --configs conservative baseline deeper
 
 Reads ``data/processed/cs-training-featured.csv``, runs stratified k-fold CV
 for each requested config, prints a comparison table, and saves the best model
@@ -27,6 +27,7 @@ from src.model import CONFIGS, CVResult, cross_validate, features_and_target, tr
 
 
 def _print_table(results: list[CVResult]) -> None:
+    """Print a comparison table of CV metrics for all evaluated configs."""
     header = (
         f"{'Config':<15} {'AUC':>8} {'±':>6} {'Gini':>8} "
         f"{'AvgPrec':>9} {'KS':>8} {'Prec':>7} {'Recall':>7} {'F1':>7} {'Trees':>7}"
@@ -52,6 +53,7 @@ def _print_table(results: list[CVResult]) -> None:
 
 
 def _print_confusion_matrix(result: CVResult) -> None:
+    """Print the confusion matrix aggregated across CV folds for one config."""
     cm = result.confusion_matrix_sum()
     tn, fp, fn, tp = cm["tn"], cm["fp"], cm["fn"], cm["tp"]
     total = tn + fp + fn + tp

@@ -27,6 +27,7 @@ leaks information into the cleaning parameters.
 from __future__ import annotations
 
 from dataclasses import dataclass, field, asdict
+from pathlib import Path
 from typing import Dict
 import json
 
@@ -72,12 +73,12 @@ class CleaningParams:
     winsor_caps: Dict[str, float] = field(default_factory=dict)
     winsor_quantile: float = 0.995
 
-    def to_json(self, path) -> None:
+    def to_json(self, path: Path | str) -> None:
         with open(path, "w", encoding="utf-8") as fh:
             json.dump(asdict(self), fh, indent=2)
 
     @classmethod
-    def from_json(cls, path) -> "CleaningParams":
+    def from_json(cls, path: Path | str) -> "CleaningParams":
         with open(path, "r", encoding="utf-8") as fh:
             return cls(**json.load(fh))
 
@@ -138,7 +139,9 @@ def apply_cleaning(
 
     return out
 
-def clean_training_data(df: pd.DataFrame, winsor_quantile: float = 0.995):
+def clean_training_data(
+    df: pd.DataFrame, winsor_quantile: float = 0.995
+) -> tuple[pd.DataFrame, CleaningParams]:
     """Convenience: fit on ``df`` and return ``(cleaned_df, params)``."""
     params = fit_cleaning_params(df, winsor_quantile=winsor_quantile)
     return apply_cleaning(df, params), params
