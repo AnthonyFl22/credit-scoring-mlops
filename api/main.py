@@ -1,4 +1,8 @@
-# Credit Scoring API
+"""FastAPI application for the credit scoring v1 model.
+
+Loads the sklearn Pipeline, decision thresholds, and feature column order at
+startup. Exposes three endpoints: GET /, GET /health, POST /predict.
+"""
 import json
 import joblib
 import pandas as pd
@@ -25,11 +29,11 @@ app = FastAPI(
 )
 
 @app.get("/")
-def root():
+def root() -> dict:
     return {"message": "Welcome to the Credit Scoring API"}
 
 @app.get("/health")
-def health_check():
+def health_check() -> dict:
     """Health check endpoint to verify that the API is running."""
     return {
         "status": "ok",
@@ -38,18 +42,8 @@ def health_check():
     }
 
 @app.post("/predict", response_model=CreditScoringOutput)
-def predict_credit_score(payload: CreditScoringInput):
+def predict_credit_score(payload: CreditScoringInput) -> CreditScoringOutput:
     """Endpoint to make credit scoring predictions."""
-    if model is None:
-        raise HTTPException(
-            status_code=500, 
-            detail="Model not loaded")
-
-    if thresholds is None:
-        raise HTTPException(
-            status_code=500, 
-            detail="Thresholds not loaded")
-
     # Convert input data to a DataFrame
     input_data = payload.model_dump(by_alias=True)
     input_df = pd.DataFrame([input_data])

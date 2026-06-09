@@ -1,4 +1,4 @@
-# Paths for model.joblib and thresholds.json
+"""Centralized artifact paths for the credit scoring API."""
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
