@@ -130,8 +130,8 @@ def apply_cleaning(
 
     # 3. Flag then impute missing income; impute missing dependents with 0.
     out["MonthlyIncome_was_missing"] = out["MonthlyIncome"].isna().astype(int)
-    out["MonthlyIncome"] = out["MonthlyIncome"].fillna(params.income_median)
-    out["NumberOfDependents"] = out["NumberOfDependents"].fillna(params.dependents_fill)
+    out["MonthlyIncome"] = out["MonthlyIncome"].astype("float64").fillna(params.income_median)
+    out["NumberOfDependents"] = out["NumberOfDependents"].astype("float64").fillna(params.dependents_fill)
 
     # 4. Winsorize heavy-tailed continuous features.
     for col, cap in params.winsor_caps.items():
