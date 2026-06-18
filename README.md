@@ -369,14 +369,14 @@ The API is containerized with Docker and deployed on **AWS ECS Express Mode** us
 docker build -t credit-scoring-api .
 
 # 2. Authenticate Docker with ECR
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 064137888747.dkr.ecr.us-east-1.amazonaws.com
+aws ecr get-login-password --region <REGION> | docker login --username AWS --password-stdin <ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com
 
 # 3. Tag and push
-docker tag credit-scoring-api:latest 064137888747.dkr.ecr.us-east-1.amazonaws.com/credit-scoring-api:latest
-docker push 064137888747.dkr.ecr.us-east-1.amazonaws.com/credit-scoring-api:latest
+docker tag credit-scoring-api:latest <ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/credit-scoring-api:latest
+docker push <ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/credit-scoring-api:latest
 
 # 4. Update the service in ECS
-aws ecs update-service --cluster default --service credit-scoring-api --force-new-deployment --region us-east-1
+aws ecs update-service --cluster default --service credit-scoring-api --force-new-deployment --region <REGION>
 ```
 
 **Run tests before deploying:**
